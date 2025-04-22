@@ -100,7 +100,7 @@ public class PlayerMove : MonoBehaviour
         }
         else
         {
-            if (_moveSpeed > PlayerDataSO.WalkSpeed)
+            if (_isRunning)
             {
                 _moveSpeed = PlayerDataSO.WalkSpeed;
                 _isRunning = false;
