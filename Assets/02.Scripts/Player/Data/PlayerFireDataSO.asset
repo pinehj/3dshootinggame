@@ -13,3 +13,9 @@ MonoBehaviour:
   m_Name: PlayerFireDataSO
   m_EditorClassIdentifier: 
   ThrowBombPower: 15
+  MaxBombChargeTime: 1
+  MaxBombChargePower: 15
+  MaxBombCount: 3
+  MaxBulletCount: 50
+  BulletFireInterval: 0.1
+  BulletReloadTime: 2
