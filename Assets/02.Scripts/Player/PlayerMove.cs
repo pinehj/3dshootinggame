@@ -18,18 +18,17 @@ public class PlayerMove : MonoBehaviour
         }
         set
         {
-            _stamina = Mathf.Clamp(value, 0, PlayerDataSO.MaxStamina);
+            _stamina = Mathf.Clamp(value, 0, PlayerMoveDataSO.MaxStamina);
             Debug.Log(_stamina);
             UIManager.Instance.UpdateStaminaSlider(_stamina);
         }
     }
 
     [Header("설정값")]
-    public PlayerDataSO PlayerDataSO;
-    private bool _isRunning = false;
+    public PlayerMoveDataSO PlayerMoveDataSO;
 
-
-
+    [Header("달리기")]
+    [SerializeField] private bool _isRunning = false;
 
     [Header("점프")]
     [SerializeField] private int _jumpCount = 0;
@@ -54,8 +53,8 @@ public class PlayerMove : MonoBehaviour
 
     private void Start()
     {
-        UIManager.Instance.InitializePlayerStaminaSlider(PlayerDataSO.MaxStamina);
-        Stamina = PlayerDataSO.MaxStamina;
+        UIManager.Instance.InitializePlayerStaminaSlider(PlayerMoveDataSO.MaxStamina);
+        Stamina = PlayerMoveDataSO.MaxStamina;
     }
     // Update is called once per frame
     void Update()
@@ -91,18 +90,18 @@ public class PlayerMove : MonoBehaviour
     {
         if (Input.GetButton("Run"))
         {
-            _moveSpeed = PlayerDataSO.WalkSpeed + PlayerDataSO.RunSpeed * (Stamina / PlayerDataSO.MaxStamina);
+            _moveSpeed = PlayerMoveDataSO.WalkSpeed + PlayerMoveDataSO.RunSpeed * (Stamina / PlayerMoveDataSO.MaxStamina);
             _isRunning = true;
             if (_characterController.velocity.x != 0 || _characterController.velocity.z != 0)
             {
-                Stamina -= PlayerDataSO.RunStaminaCost * Time.deltaTime;
+                Stamina -= PlayerMoveDataSO.RunStaminaCost * Time.deltaTime;
             }
         }
         else
         {
             if (_isRunning)
             {
-                _moveSpeed = PlayerDataSO.WalkSpeed;
+                _moveSpeed = PlayerMoveDataSO.WalkSpeed;
                 _isRunning = false;
             }
         }
@@ -121,9 +120,9 @@ public class PlayerMove : MonoBehaviour
     public void Jump()
     {
         // 점프
-        if (Input.GetButtonDown("Jump") && _jumpCount < PlayerDataSO.MaxJumpCount && !_isClimbing)
+        if (Input.GetButtonDown("Jump") && _jumpCount < PlayerMoveDataSO.MaxJumpCount && !_isClimbing)
         {
-            _yVelocity = PlayerDataSO.JumpPower;
+            _yVelocity = PlayerMoveDataSO.JumpPower;
             _isJumping = true;
             _jumpCount++;
         }
@@ -131,9 +130,9 @@ public class PlayerMove : MonoBehaviour
 
     public void Dash()
     {
-        if (Input.GetButtonDown("Dash") && Stamina >= PlayerDataSO.DashStaminaCost && !_isDashing)
+        if (Input.GetButtonDown("Dash") && Stamina >= PlayerMoveDataSO.DashStaminaCost && !_isDashing)
         {
-            Stamina -= PlayerDataSO.DashStaminaCost;
+            Stamina -= PlayerMoveDataSO.DashStaminaCost;
             StartCoroutine(nameof(DashCoroutine));
         }
     }
@@ -145,8 +144,8 @@ public class PlayerMove : MonoBehaviour
             dir = Vector3.forward;
             dir = Camera.main.transform.TransformDirection(dir);
         }
-        dir *= PlayerDataSO.DashPower;
-        yield return new WaitForSeconds(PlayerDataSO.DashDuration);
+        dir *= PlayerMoveDataSO.DashPower;
+        yield return new WaitForSeconds(PlayerMoveDataSO.DashDuration);
         _isDashing = false;
     }
 
@@ -155,7 +154,7 @@ public class PlayerMove : MonoBehaviour
         if (!_isDashing && (_characterController.collisionFlags & CollisionFlags.Sides) != 0 && Stamina > 0)
         {
             _isClimbing = true;
-            Stamina -= PlayerDataSO.ClimbStaminaCost * Time.deltaTime;
+            Stamina -= PlayerMoveDataSO.ClimbStaminaCost * Time.deltaTime;
         }
         else
         {
@@ -192,7 +191,7 @@ public class PlayerMove : MonoBehaviour
         else
         {
             dir.y = 1;
-            _characterController.Move(dir * PlayerDataSO.ClimbSpeed * Time.deltaTime);
+            _characterController.Move(dir * PlayerMoveDataSO.ClimbSpeed * Time.deltaTime);
         }
     }
 
@@ -202,9 +201,9 @@ public class PlayerMove : MonoBehaviour
         {
             return;
         }
-        if (Stamina < PlayerDataSO.MaxStamina)
+        if (Stamina < PlayerMoveDataSO.MaxStamina)
         {
-            Stamina += PlayerDataSO.StaminaRegen * Time.deltaTime;
+            Stamina += PlayerMoveDataSO.StaminaRegen * Time.deltaTime;
         }
     }
 }

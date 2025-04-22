@@ -8,7 +8,7 @@ public class CameraRotate : MonoBehaviour
     public float RotationSpeed = 15f;
     private float _rotationX = 0;
     private float _rotationY = 0;
-    private void Update()
+    private void LateUpdate()
     {
         // 1. 마우스 입력을 받는다.(마우스의 커서의 움직임 방향)
         float mouseX = Input.GetAxis("Mouse X");
