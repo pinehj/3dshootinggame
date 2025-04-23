@@ -19,8 +19,7 @@ public class PlayerMove : MonoBehaviour
         set
         {
             _stamina = Mathf.Clamp(value, 0, PlayerMoveDataSO.MaxStamina);
-            Debug.Log(_stamina);
-            UIManager.Instance.UpdateStaminaSlider(_stamina);
+            UIManager.Instance.UpdateStaminaSlider(_stamina);   
         }
     }
 

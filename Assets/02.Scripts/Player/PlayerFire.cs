@@ -1,5 +1,6 @@
 using System.Collections;
 using TMPro;
+using UnityEditor.PackageManager;
 using UnityEditor.Rendering;
 using UnityEngine;
 
@@ -21,6 +22,12 @@ public class PlayerFire : MonoBehaviour
     [Header("총알")]
     [SerializeField] private float _bulletFireTimer;
     [SerializeField] private int _bulletCount;
+
+    [Header("연사")]
+    [SerializeField] private int _burstFireCount;
+    [SerializeField] private float _minVerticalRecoil;
+    [SerializeField] private float _maxVerticalRecoil;
+    [SerializeField] private float _verticalRecoilSpeed;
     public int BulletCount
     {
         get
@@ -35,6 +42,8 @@ public class PlayerFire : MonoBehaviour
     }
     [SerializeField] private bool _isReloading;
     [SerializeField] private float _bulletReloadTimer;
+
+    public LineRenderer FireEffect;
     public float BulletReloadTimer
     {
         get
@@ -105,12 +114,11 @@ public class PlayerFire : MonoBehaviour
         {
             if (_isReloading)
             {
-                StopCoroutine(nameof(ReloadBulletCoroutine));
-                BulletReloadTimer = 0;
+                CancelReload();
             }
             if (BulletCount > 0)
             {
-                Ray ray = new Ray(FireBulletPosition.transform.position, Camera.main.transform.forward);
+                Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
                 RaycastHit hitInfo = new RaycastHit();
 
                 bool isHit = Physics.Raycast(ray, out hitInfo);
@@ -121,26 +129,60 @@ public class PlayerFire : MonoBehaviour
                     BulletEffect.transform.position = hitInfo.point;
                     BulletEffect.transform.forward = hitInfo.normal;
 
-
+                    StopCoroutine(nameof(DeactiveFireEffectCoroutine));
+                    StartFireEffect(hitInfo);
+                    StartCoroutine(nameof(DeactiveFireEffectCoroutine), .03f);
                     // 게임 수학: 선형대수학(스칼라, 벡터
+
+                    if (hitInfo.collider.gameObject.CompareTag("Enemy"))
+                    {
+                        Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
+
+                        Damage damage = new Damage();
+                        damage.Value = 10;
+                        damage.KnockbackPower = 10;
+                        damage.From = gameObject;
+
+                        enemy.TakeDamage(damage);
+                    }
                 }
                 _bulletFireTimer = PlayerFireDataSO.BulletFireInterval;
                 BulletCount--;
 
+                _burstFireCount++;
+
+                if(_burstFireCount > 3)
+                {
+                    Camera.main.transform.GetComponent<CameraRotate>().Rotate(new Vector2(0, Random.Range(_minVerticalRecoil, _maxVerticalRecoil)) * Time.deltaTime * _verticalRecoilSpeed);
+                }
+                
+                
                 //if (BulletCount == 0)
                 //{
                 //    StartCoroutine(nameof(ReloadBulletCoroutine));
                 //}
             }
         }
+
+        if (Input.GetMouseButtonUp(0))
+        {
+            _burstFireCount = 0;
+        }
     }
 
     private void Reload()
     {
-        if(Input.GetButtonDown("Reload") && BulletCount < PlayerFireDataSO.MaxBulletCount)
+        if(Input.GetButtonDown("Reload") && BulletCount < PlayerFireDataSO.MaxBulletCount && !_isReloading)
         {
             StartCoroutine(nameof(ReloadBulletCoroutine));
         }
+    }
+
+    private void CancelReload()
+    {
+        _isReloading = false;
+        StopCoroutine(nameof(ReloadBulletCoroutine));
+        BulletReloadTimer = 0;
     }
 
     private void FireBomb()
@@ -177,5 +219,18 @@ public class PlayerFire : MonoBehaviour
         _isReloading = false;
         BulletReloadTimer = 0;
         Debug.Log("Reload Complete");
+    }
+
+    private void StartFireEffect(RaycastHit hitInfo)
+    {
+        FireEffect.gameObject.SetActive(true);
+        FireEffect.positionCount = 2;
+        FireEffect.SetPosition(0, FireBulletPosition.transform.position);
+        FireEffect.SetPosition(1, hitInfo.point);
+    }
+    IEnumerator DeactiveFireEffectCoroutine(float lifeTime = .03f)
+    {
+        yield return new WaitForSeconds(lifeTime);
+        FireEffect.gameObject.SetActive(false);
     }
 }
