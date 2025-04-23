@@ -16,7 +16,6 @@ public class BombPool : Singleton<BombPool>
         for(int i = 0; i< poolSize; ++i)
         {
             Bomb bomb = Instantiate(BombPrefab, transform);
-            DontDestroyOnLoad(bomb);
             bomb.gameObject.SetActive(false);
             _bombPool.Add(bomb);
         }
