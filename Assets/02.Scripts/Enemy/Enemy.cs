@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
-    public enum EnemyState
+    public enum EEnemyState
     {
         Idle,
         Patrol,
@@ -15,9 +15,10 @@ public class Enemy : MonoBehaviour
         Die
     }
 
-    public EnemyState CurrentState = EnemyState.Idle;
+    public EEnemyState CurrentState = EEnemyState.Idle;
 
     private GameObject _player;
+    public GameObject Player => _player;
     private CharacterController _characterController;
 
     private Vector3 _startPosition;
@@ -26,7 +27,7 @@ public class Enemy : MonoBehaviour
     public int PatrolPointsNum;
     private Coroutine _patrolCoroutine;
 
-    public float IdleTime = 5f;
+    public float WaitAndPatrolTime = 5f;
 
     public float FindDistance = 7f;
     public float ReturnDistance = 1f;
@@ -59,37 +60,37 @@ public class Enemy : MonoBehaviour
     {
         switch (CurrentState)
         {
-            case EnemyState.Idle:
+            case EEnemyState.Idle:
             {
                 Idle();
                 break;
             }
-            case EnemyState.Patrol:
+            case EEnemyState.Patrol:
             {
                 Patrol();
                 break;
             }
-            case EnemyState.Trace:
+            case EEnemyState.Trace:
             {
                 Trace();
                 break;
             }
-            case EnemyState.Return:
+            case EEnemyState.Return:
             {
                 Return();
                 break;
             }
-            case EnemyState.Attack:
+            case EEnemyState.Attack:
             {
                 Attack();
                 break;
             }
-            case EnemyState.Damaged:
+            case EEnemyState.Damaged:
             {
                 Damaged();
                 break;
             }
-            case EnemyState.Die:
+            case EEnemyState.Die:
             {
                 break;
             }
@@ -103,7 +104,7 @@ public class Enemy : MonoBehaviour
         _knockbackedPower = damage.KnockbackPower;
         if (_health <= 0)
         {
-            CurrentState = EnemyState.Die;
+            CurrentState = EEnemyState.Die;
             Debug.Log($"상태전환: {CurrentState} -> Die");
             StartCoroutine(nameof(DieRoutine));
 
@@ -115,7 +116,7 @@ public class Enemy : MonoBehaviour
         _patrolCoroutine = null;
         //
 
-        CurrentState = EnemyState.Damaged;
+        CurrentState = EEnemyState.Damaged;
 
         StopCoroutine(nameof(DamagedRoutine));
         StartCoroutine(nameof(DamagedRoutine));
@@ -131,7 +132,7 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(transform.position, _player.transform.position) < FindDistance)
         {
             Debug.Log("상태전환: Idle -> Trace");
-            CurrentState = EnemyState.Trace;
+            CurrentState = EEnemyState.Trace;
 
 
             //...
@@ -148,7 +149,7 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(transform.position, _player.transform.position) < FindDistance)
         {
             Debug.Log("상태전환: Patorl -> Trace");
-            CurrentState = EnemyState.Trace;
+            CurrentState = EEnemyState.Trace;
             return;
         }
         if (Vector3.Distance(transform.position, PatrolPoints[_patrolIndex].position) <= ReturnDistance)
@@ -165,14 +166,14 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(transform.position, _player.transform.position) > FindDistance)
         {
             Debug.Log("상태전환: Trace -> Return");
-            CurrentState = EnemyState.Return;
+            CurrentState = EEnemyState.Return;
             return;
         }
 
         if (Vector3.Distance(transform.position, _player.transform.position) < AttackDistance)
         {
             Debug.Log("상태전환: Trace -> Attack");
-            CurrentState = EnemyState.Attack;
+            CurrentState = EEnemyState.Attack;
             return;
         }
 
@@ -185,14 +186,14 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(transform.position, _startPosition) <= ReturnDistance)
         {
             Debug.Log("상태전환: Return -> Idle");
-            CurrentState = EnemyState.Idle;
+            CurrentState = EEnemyState.Idle;
             return;
         }
 
         if (Vector3.Distance(transform.position, _player.transform.position) < FindDistance)
         {
             Debug.Log("상태전환: Return -> Trace");
-            CurrentState = EnemyState.Trace;
+            CurrentState = EEnemyState.Trace;
             return;
         }
         Vector3 dir = (_startPosition - transform.position).normalized;
@@ -204,7 +205,7 @@ public class Enemy : MonoBehaviour
         if (Vector3.Distance(transform.position, _player.transform.position) > AttackDistance)
         {
             Debug.Log("상태전환: Attack -> Trace");
-            CurrentState = EnemyState.Trace;
+            CurrentState = EEnemyState.Trace;
             return;
         }
 
@@ -225,7 +226,7 @@ public class Enemy : MonoBehaviour
     {
         yield return new WaitForSeconds(DamageTime);
         Debug.Log("상태전환: Damaged -> Trace");
-        CurrentState = EnemyState.Trace;
+        CurrentState = EEnemyState.Trace;
     }
 
     private IEnumerator DieRoutine()
@@ -236,14 +237,14 @@ public class Enemy : MonoBehaviour
 
     private IEnumerator WaitPatrolRoutine()
     {
-        yield return new WaitForSeconds(IdleTime);
+        yield return new WaitForSeconds(WaitAndPatrolTime);
         Debug.Log("상태전환: Idle -> Patrol");
 
         //...
         //인터페이스로 구현할껄..
         _patrolCoroutine = null;
         ///
-        CurrentState = EnemyState.Patrol;
+        CurrentState = EEnemyState.Patrol;
     }
 
     private void CancelRoutine(Coroutine coroutine)

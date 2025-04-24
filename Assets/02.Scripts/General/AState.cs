@@ -2,7 +2,12 @@ using UnityEngine;
 
 public abstract class AState
 {
-    protected StateMachine _stateMachine;
+    protected AStateMachine _stateMachine;
+
+    public AState(AStateMachine stateMachine)
+    {
+        _stateMachine = stateMachine;
+    }
 
     public abstract void Enter();
     public abstract void Update();

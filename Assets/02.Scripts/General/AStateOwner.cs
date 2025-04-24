@@ -2,5 +2,7 @@ using UnityEngine;
 
 public abstract class AStateMachineOwner : MonoBehaviour
 {
-    private StateMachine _statemachine;
+    protected AStateMachine _statemachine;
+
+    public abstract void InitializeStateMachine();
 }

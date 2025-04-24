@@ -2,12 +2,12 @@ using System.Collections;
 using UnityEngine;
 
 
-public class EnemyIdleState : AState
+public class EnemyReturnState : AState
 {
     private Enemy _enemy;
     private float _waitAndPatrolTimer = 0;
 
-    public EnemyIdleState(AStateMachine stateMachine, Enemy enemy) : base(stateMachine)
+    public EnemyReturnState(AStateMachine stateMachine, Enemy enemy) : base(stateMachine)
     {
         _enemy = enemy;
     }
