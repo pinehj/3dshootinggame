@@ -10,8 +10,11 @@ public class PlayerRotate : MonoBehaviour
     {
         float mouseX = Input.GetAxis("Mouse X");
 
-        _rotationX += mouseX * RotationSpeed * Time.deltaTime;
+        if (UnityEngine.Cursor.lockState == CursorLockMode.Locked)
+        {
+            _rotationX += mouseX * RotationSpeed * Time.deltaTime;
 
-        transform.eulerAngles = new Vector3(0, _rotationX, 0);
+            transform.eulerAngles = new Vector3(0, _rotationX, 0);
+        }
     }
 }

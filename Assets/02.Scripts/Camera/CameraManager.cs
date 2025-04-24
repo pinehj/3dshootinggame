@@ -56,7 +56,10 @@ public class CameraManager : MonoBehaviour
 
 
         //90 ~ 0   270 ~ 360
-        Rotate(new Vector2(_rotationX, _rotationY));
+        if (UnityEngine.Cursor.lockState == CursorLockMode.Locked)
+        {
+            Rotate(new Vector2(_rotationX, _rotationY));
+        }
         Follow();
         //transform.rotation = new Quaternion(Mathf.Clamp((transform.rotation.x - _rotationY), -90, 90), transform.rotation.y + _rotationX, 0, 0);
         // 회전의 상하 제한 필요(-90, 90)

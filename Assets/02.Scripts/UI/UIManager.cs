@@ -17,6 +17,22 @@ public class UIManager : Singleton<UIManager>
     public TextMeshProUGUI BombCountText;
     public Slider BoombChargeSlider;
 
+    private void Start()
+    {
+            Cursor.lockState = CursorLockMode.Locked;
+    }
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.BackQuote))
+        {
+            Cursor.lockState = CursorLockMode.None;
+        }
+        if (Input.GetKeyUp(KeyCode.BackQuote))
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
+
+    }
     public void InitializePlayerStaminaSlider(float value)
     {
         StaminaSlider.maxValue = value;

@@ -86,8 +86,6 @@ public class PlayerFire : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-
         BulletCount = PlayerFireDataSO.MaxBulletCount;
         UIManager.Instance.InitializeBulletReloadSlider(PlayerFireDataSO.BulletReloadTime);
         BulletReloadTimer = 0;
@@ -98,9 +96,12 @@ public class PlayerFire : MonoBehaviour
     }
     private void Update()
     {
-        FireBullet();
-        FireBomb();
-        Reload();
+        if (UnityEngine.Cursor.lockState == CursorLockMode.Locked)
+        {
+            FireBullet();
+            FireBomb();
+            Reload();
+        }
     }
     private void FireBullet()
     {
@@ -131,17 +132,15 @@ public class PlayerFire : MonoBehaviour
 
 
                     // 게임 수학: 선형대수학(스칼라, 벡터
-
-                    if (hitInfo.collider.gameObject.CompareTag("Enemy"))
+                    IDamageable damagedEntity = hitInfo.collider.GetComponent<IDamageable>();
+                    if (damagedEntity != null)
                     {
-                        Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
-
                         Damage damage = new Damage();
                         damage.Value = 10;
                         damage.KnockbackPower = 10;
                         damage.From = gameObject;
 
-                        enemy.TakeDamage(damage);
+                        damagedEntity.TakeDamage(damage);
                     }
                 }
 
