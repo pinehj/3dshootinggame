@@ -29,6 +29,10 @@ public class BombPool : Singleton<BombPool>
             {
                 Bomb bomb = _bombPool[i];
                 bomb.transform.position = position;
+                bomb.transform.rotation = new Quaternion(0,0,0,0);
+                bomb.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
+                bomb.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
                 bomb.gameObject.SetActive(true);
                 return bomb;
             }
