@@ -15,7 +15,7 @@ MonoBehaviour:
   ThrowBombPower: 15
   MaxBombChargeTime: 1
   MaxBombChargePower: 15
-  MaxBombCount: 3
+  MaxBombCount: 5
   MaxBulletCount: 50
   BulletFireInterval: 0.1
   BulletReloadTime: 2

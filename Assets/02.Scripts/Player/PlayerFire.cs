@@ -86,8 +86,6 @@ public class PlayerFire : MonoBehaviour
 
     private void Start()
     {
-        Cursor.lockState = CursorLockMode.Locked;
-
         BulletCount = PlayerFireDataSO.MaxBulletCount;
         UIManager.Instance.InitializeBulletReloadSlider(PlayerFireDataSO.BulletReloadTime);
         BulletReloadTimer = 0;
@@ -98,9 +96,12 @@ public class PlayerFire : MonoBehaviour
     }
     private void Update()
     {
-        FireBullet();
-        FireBomb();
-        Reload();
+        if (UnityEngine.Cursor.lockState == CursorLockMode.Locked)
+        {
+            FireBullet();
+            FireBomb();
+            Reload();
+        }
     }
     private void FireBullet()
     {
@@ -129,23 +130,25 @@ public class PlayerFire : MonoBehaviour
                     BulletEffect.transform.position = hitInfo.point;
                     BulletEffect.transform.forward = hitInfo.normal;
 
-                    StopCoroutine(nameof(DeactiveFireEffectCoroutine));
-                    StartFireEffect(hitInfo);
-                    StartCoroutine(nameof(DeactiveFireEffectCoroutine), .03f);
+
                     // 게임 수학: 선형대수학(스칼라, 벡터
-
-                    if (hitInfo.collider.gameObject.CompareTag("Enemy"))
+                    IDamageable damagedEntity = hitInfo.collider.GetComponent<IDamageable>();
+                    if (damagedEntity != null)
                     {
-                        Enemy enemy = hitInfo.collider.GetComponent<Enemy>();
-
                         Damage damage = new Damage();
                         damage.Value = 10;
                         damage.KnockbackPower = 10;
                         damage.From = gameObject;
 
-                        enemy.TakeDamage(damage);
+                        damagedEntity.TakeDamage(damage);
                     }
                 }
+
+                StopCoroutine(nameof(DeactiveFireEffectCoroutine));
+                StartFireEffect(hitInfo, isHit);
+                StartCoroutine(nameof(DeactiveFireEffectCoroutine), .03f);
+
+
                 _bulletFireTimer = PlayerFireDataSO.BulletFireInterval;
                 BulletCount--;
 
@@ -153,7 +156,7 @@ public class PlayerFire : MonoBehaviour
 
                 if(_burstFireCount > 3)
                 {
-                    Camera.main.transform.GetComponent<CameraRotate>().Rotate(new Vector2(0, Random.Range(_minVerticalRecoil, _maxVerticalRecoil)) * Time.deltaTime * _verticalRecoilSpeed);
+                    Camera.main.transform.GetComponent<CameraManager>().Rotate(new Vector2(0, Random.Range(_minVerticalRecoil, _maxVerticalRecoil)) * Time.deltaTime * _verticalRecoilSpeed);
                 }
                 
                 
@@ -221,12 +224,21 @@ public class PlayerFire : MonoBehaviour
         Debug.Log("Reload Complete");
     }
 
-    private void StartFireEffect(RaycastHit hitInfo)
+    private void StartFireEffect(RaycastHit hitInfo, bool isHit)
     {
         FireEffect.gameObject.SetActive(true);
         FireEffect.positionCount = 2;
         FireEffect.SetPosition(0, FireBulletPosition.transform.position);
-        FireEffect.SetPosition(1, hitInfo.point);
+
+        if (isHit)
+        {
+            FireEffect.SetPosition(1, hitInfo.point);
+        }
+        else
+        {
+            FireEffect.SetPosition(1, FireBulletPosition.transform.position + Camera.main.transform.forward * 1000f);
+        }
+
     }
     IEnumerator DeactiveFireEffectCoroutine(float lifeTime = .03f)
     {

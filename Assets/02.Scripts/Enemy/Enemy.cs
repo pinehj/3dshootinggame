@@ -1,8 +1,9 @@
 using System.Collections;
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.AI;
 
-public class Enemy : MonoBehaviour
+public class Enemy : MonoBehaviour, IDamageable
 {
     public enum EEnemyState
     {
@@ -20,6 +21,7 @@ public class Enemy : MonoBehaviour
     private GameObject _player;
     public GameObject Player => _player;
     private CharacterController _characterController;
+    private NavMeshAgent _agent;
 
     private Vector3 _startPosition;
     public Transform[] PatrolPoints;
@@ -49,6 +51,7 @@ public class Enemy : MonoBehaviour
         _player = GameObject.FindGameObjectWithTag("Player");
         _characterController = GetComponent<CharacterController>();
         _startPosition = transform.position;
+        _agent = GetComponent<NavMeshAgent>();
     }
 
     private void Start()
@@ -177,8 +180,10 @@ public class Enemy : MonoBehaviour
             return;
         }
 
-        Vector3 dir = (_player.transform.position - transform.position).normalized;
-        _characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        //Vector3 dir = (_player.transform.position - transform.position).normalized;
+        //_characterController.Move(dir * MoveSpeed * Time.deltaTime);
+
+        _agent.SetDestination(_player.transform.position);
     }
 
     private void Return()
@@ -196,8 +201,9 @@ public class Enemy : MonoBehaviour
             CurrentState = EEnemyState.Trace;
             return;
         }
-        Vector3 dir = (_startPosition - transform.position).normalized;
-        _characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        //Vector3 dir = (_startPosition - transform.position).normalized;
+        //_characterController.Move(dir * MoveSpeed * Time.deltaTime);
+        _agent.SetDestination(_startPosition);
     }
 
     private void Attack()
@@ -221,6 +227,9 @@ public class Enemy : MonoBehaviour
     {
         Vector3 dir = (transform.position - _damageOrigin).normalized;
         _characterController.Move(dir * _knockbackedPower * Time.deltaTime);
+
+
+
     }
     private IEnumerator DamagedRoutine()
     {
