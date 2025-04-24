@@ -105,20 +105,20 @@ public class Enemy : MonoBehaviour
         {
             CurrentState = EnemyState.Die;
             Debug.Log($"상태전환: {CurrentState} -> Die");
-            StartCoroutine(nameof(DieCoroutine));
+            StartCoroutine(nameof(DieRoutine));
 
         }
         Debug.Log($"상태전환: {CurrentState} -> Damaged");
 
         //인터페이스로 구현할껄..
-        CancelCoroutine(_patrolCoroutine);
+        CancelRoutine(_patrolCoroutine);
         _patrolCoroutine = null;
         //
 
         CurrentState = EnemyState.Damaged;
 
-        StopCoroutine(nameof(DamagedCoroutine));
-        StartCoroutine(nameof(DamagedCoroutine));
+        StopCoroutine(nameof(DamagedRoutine));
+        StartCoroutine(nameof(DamagedRoutine));
 
     }
     private void Idle()
@@ -126,7 +126,7 @@ public class Enemy : MonoBehaviour
         if (_patrolCoroutine == null)
         {
             _patrolIndex = 0;
-            _patrolCoroutine = StartCoroutine(nameof(WaitPatrolCoroutine));
+            _patrolCoroutine = StartCoroutine(nameof(WaitPatrolRoutine));
         }
         if (Vector3.Distance(transform.position, _player.transform.position) < FindDistance)
         {
@@ -136,7 +136,7 @@ public class Enemy : MonoBehaviour
 
             //...
             //인터페이스로 구현할껄..
-            CancelCoroutine(_patrolCoroutine);
+            CancelRoutine(_patrolCoroutine);
             _patrolCoroutine = null;
             //
             return;
@@ -221,20 +221,20 @@ public class Enemy : MonoBehaviour
         Vector3 dir = (transform.position - _damageOrigin).normalized;
         _characterController.Move(dir * _knockbackedPower * Time.deltaTime);
     }
-    private IEnumerator DamagedCoroutine()
+    private IEnumerator DamagedRoutine()
     {
         yield return new WaitForSeconds(DamageTime);
         Debug.Log("상태전환: Damaged -> Trace");
         CurrentState = EnemyState.Trace;
     }
 
-    private IEnumerator DieCoroutine()
+    private IEnumerator DieRoutine()
     {
         yield return new WaitForSeconds(2f);
         gameObject.SetActive(false);
     }
 
-    private IEnumerator WaitPatrolCoroutine()
+    private IEnumerator WaitPatrolRoutine()
     {
         yield return new WaitForSeconds(IdleTime);
         Debug.Log("상태전환: Idle -> Patrol");
@@ -246,7 +246,7 @@ public class Enemy : MonoBehaviour
         CurrentState = EnemyState.Patrol;
     }
 
-    private void CancelCoroutine(Coroutine coroutine)
+    private void CancelRoutine(Coroutine coroutine)
     {
         if(coroutine != null)
         {
