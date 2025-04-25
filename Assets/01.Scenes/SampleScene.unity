@@ -3393,9 +3393,8 @@ MonoBehaviour:
   - {fileID: 280501393}
   - {fileID: 841773812}
   - {fileID: 1384700799}
-  _patrolIndex: 0
   PatrolPointsNum: 3
-  IdleTime: 5
+  WaitAndPatrolTime: 5
   FindDistance: 10
   ReturnDistance: 1.5
   AttackDistance: 2
@@ -3403,6 +3402,7 @@ MonoBehaviour:
   AttackCoolTime: 0.5
   MaxHealtlh: 999999
   DamageTime: 0.2
+  DieTime: 2
 --- !u!143 &1084367275
 CharacterController:
   m_ObjectHideFlags: 0
@@ -3439,12 +3439,12 @@ NavMeshAgent:
   m_AgentTypeID: 0
   m_Radius: 0.5
   m_Speed: 3.5
-  m_Acceleration: 8
+  m_Acceleration: 1000
   avoidancePriority: 50
-  m_AngularSpeed: 120
+  m_AngularSpeed: 1000
   m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
-  m_AutoBraking: 1
+  m_AutoBraking: 0
   m_AutoRepath: 1
   m_Height: 2
   m_BaseOffset: 1

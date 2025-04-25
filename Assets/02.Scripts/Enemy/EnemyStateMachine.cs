@@ -1,6 +1,4 @@
 using System.Collections.Generic;
-using Unity.VisualScripting;
-using UnityEngine;
 
 public class EnemyStateMachine : AStateMachine
 {
@@ -10,11 +8,12 @@ public class EnemyStateMachine : AStateMachine
         //상태에 관한 컴포넌트
         //움직임에 관한 컴포넌트
         _enemy = _owner.GetComponent<Enemy>();
+        InitializeState();
     }
 
     public override void InitializeState()
     {
-        StateDict = new Dictionary<EState, AState>
+        _stateDict = new Dictionary<EState, AState>
         {
             { EState.Idle, new EnemyIdleState(this, _enemy) },
             { EState.Patrol, new EnemyPatrolState(this, _enemy) },
@@ -24,5 +23,7 @@ public class EnemyStateMachine : AStateMachine
             { EState.Damaged, new EnemyDamagedState(this, _enemy) },
             { EState.Die, new EnemyDieState(this, _enemy) },
         };
+
+        ChangeState(EState.Idle);
     }
 }

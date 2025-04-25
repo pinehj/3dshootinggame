@@ -1,7 +1,4 @@
 using System.Collections.Generic;
-using UnityEngine;
-using UnityEngine.InputSystem.XR.Haptics;
-using UnityEngine.XR;
 
 public enum EState
 {
@@ -17,7 +14,7 @@ public abstract class AStateMachine
 {
     protected AStateMachineOwner _owner;
     protected AState _currentState;
-    public Dictionary<EState, AState> StateDict = new Dictionary<EState, AState>();
+    protected Dictionary<EState, AState> _stateDict = new Dictionary<EState, AState>();
 
     public abstract void InitializeState();
 
@@ -29,9 +26,17 @@ public abstract class AStateMachine
     {
         _currentState.Update();
     }
-    public void ChangeState(AState targetState)
+    public void ChangeState(EState targetState)
     {
-        _currentState.Exit();
-        targetState.Enter();
+        
+        if(_currentState != null){
+            if(_currentState == _stateDict[targetState])
+            {
+                return;
+            }
+            _currentState.Exit();
+        }
+        _currentState = _stateDict[targetState];
+        _currentState.Enter();
     }
 }

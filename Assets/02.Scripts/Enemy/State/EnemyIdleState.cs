@@ -1,6 +1,4 @@
-using System.Collections;
 using UnityEngine;
-
 
 public class EnemyIdleState : AState
 {
@@ -27,14 +25,14 @@ public class EnemyIdleState : AState
         if(_waitAndPatrolTimer > _enemy.WaitAndPatrolTime)
         {
             Debug.Log("상태전환: Idle -> Patorl");
-            _stateMachine.ChangeState(_stateMachine.StateDict[EState.Patrol]);
+            _stateMachine.ChangeState(EState.Patrol);
             return;
         }
        
         if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) < _enemy.FindDistance)
         {
             Debug.Log("상태전환: Idle -> Trace");
-            _stateMachine.ChangeState(_stateMachine.StateDict[EState.Trace]);
+            _stateMachine.ChangeState(EState.Trace);
             return;
         }
 
