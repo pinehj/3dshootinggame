@@ -1,17 +1,17 @@
 using UnityEngine;
 using static UnityEngine.GraphicsBuffer;
-
-public class CameraManager : MonoBehaviour
+public enum ECameraMode
 {
-    public enum ECameraMode
-    {
-        FPS,
-        TPS,
-        QV
-    }
+    FPS,
+    TPS,
+    QV
+}
+public class CameraManager : Singleton<CameraManager>
+{
+
 
     private ECameraMode _currentMode;
-
+    public ECameraMode CurrentMode => _currentMode;
 
     public float RotationSpeed = 15f;
     private float _rotationX = 0;
@@ -19,11 +19,11 @@ public class CameraManager : MonoBehaviour
 
     private Transform _target;
     public Transform FPSTarget;
+    public Transform TPSPivot;
     public Transform TPSTarget;
     public Transform QVTarget;
 
-    public Transform TPSPivot;
-
+    public Vector3 QVOffset;
     private void Start()
     {
         _currentMode = ECameraMode.FPS;
@@ -69,7 +69,20 @@ public class CameraManager : MonoBehaviour
     }
     public void Follow()
     {
-        transform.position = _target.position;
+        switch (_currentMode)
+        {
+            case ECameraMode.FPS:
+            case ECameraMode.TPS:
+            {
+                transform.position = _target.position;
+                break;
+            }
+            case ECameraMode.QV:
+            {
+                transform.position = _target.position + QVOffset;
+                break;
+            }
+        }
     }
     public void Rotate(Vector2 delta)
     {
@@ -85,11 +98,14 @@ public class CameraManager : MonoBehaviour
                                     , transform.eulerAngles.y + delta.x, 0);
                 break;
             }
+            case ECameraMode.QV:
+            {
+                TPSPivot.eulerAngles = new Vector3(Mathf.Clamp(((TPSPivot.eulerAngles.x >= 270) ? TPSPivot.eulerAngles.x - 360 : TPSPivot.eulerAngles.x) - delta.y, -90, 90)
+                                    , TPSPivot.eulerAngles.y, 0);
+                transform.LookAt(_target, Vector3.up);
+                break;
+            }
         }
-
-
-
-
     }
 
     public void ChangeCameraMode()

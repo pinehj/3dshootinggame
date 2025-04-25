@@ -10,6 +10,9 @@ public class Drum : MonoBehaviour, IDamageable
     private Rigidbody _rigidbody;
     public float ExplodePower;
     public float DeactiveTime;
+
+    public LayerMask AttackTargetLayer;
+
     private void Awake()
     {
         _rigidbody = GetComponent<Rigidbody>();
@@ -26,6 +29,7 @@ public class Drum : MonoBehaviour, IDamageable
             return;
         }
         _health -= damage.Value;
+        _rigidbody.AddForceAtPosition(-damage.Normal * damage.KnockbackPower, damage.HitPoint, ForceMode.Impulse);
         if(_health <= 0)
         {
             StartCoroutine(ExplodeRoutine());
@@ -41,7 +45,7 @@ public class Drum : MonoBehaviour, IDamageable
         explodeEffect.transform.position = transform.position;
 
 
-        Collider[] hits = Physics.OverlapSphere(transform.position, ExplodeRadius);
+        Collider[] hits = Physics.OverlapSphere(transform.position, ExplodeRadius, AttackTargetLayer);
         foreach(Collider hit in hits)
         {
             if(hit.transform.gameObject == gameObject)
@@ -52,7 +56,7 @@ public class Drum : MonoBehaviour, IDamageable
             if (damagedEntity != null)
             {
                 Damage damage = new Damage();
-                damage.Value = 100;
+                damage.Value = 50;
                 damage.KnockbackPower = 50;
                 damage.From = gameObject;
 

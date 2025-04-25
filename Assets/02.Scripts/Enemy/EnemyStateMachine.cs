@@ -8,22 +8,5 @@ public class EnemyStateMachine : AStateMachine
         //상태에 관한 컴포넌트
         //움직임에 관한 컴포넌트
         _enemy = _owner.GetComponent<Enemy>();
-        InitializeState();
-    }
-
-    public override void InitializeState()
-    {
-        _stateDict = new Dictionary<EState, AState>
-        {
-            { EState.Idle, new EnemyIdleState(this, _enemy) },
-            { EState.Patrol, new EnemyPatrolState(this, _enemy) },
-            { EState.Trace, new EnemyTraceState(this, _enemy) },
-            { EState.Attack, new EnemyAttackState(this, _enemy) },
-            { EState.Return, new EnemyReturnState(this, _enemy) },
-            { EState.Damaged, new EnemyDamagedState(this, _enemy) },
-            { EState.Die, new EnemyDieState(this, _enemy) },
-        };
-
-        ChangeState(EState.Idle);
     }
 }

@@ -28,6 +28,7 @@ public class PlayerFire : MonoBehaviour
     [SerializeField] private float _minVerticalRecoil;
     [SerializeField] private float _maxVerticalRecoil;
     [SerializeField] private float _verticalRecoilSpeed;
+
     public int BulletCount
     {
         get
@@ -119,7 +120,15 @@ public class PlayerFire : MonoBehaviour
             }
             if (BulletCount > 0)
             {
-                Ray ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+                Ray ray;
+                if (CameraManager.Instance.CurrentMode == ECameraMode.QV)
+                {
+                    ray = new Ray(FireBulletPosition.transform.position, transform.forward);
+                }
+                else
+                {
+                    ray = new Ray(Camera.main.transform.position, Camera.main.transform.forward);
+                }
                 RaycastHit hitInfo = new RaycastHit();
 
                 bool isHit = Physics.Raycast(ray, out hitInfo);
@@ -139,7 +148,9 @@ public class PlayerFire : MonoBehaviour
                         damage.Value = 10;
                         damage.KnockbackPower = 10;
                         damage.From = gameObject;
+                        damage.HitPoint = hitInfo.point;
 
+                        damage.Normal = hitInfo.normal;
                         damagedEntity.TakeDamage(damage);
                     }
                 }
@@ -236,7 +247,14 @@ public class PlayerFire : MonoBehaviour
         }
         else
         {
-            FireEffect.SetPosition(1, FireBulletPosition.transform.position + Camera.main.transform.forward * 1000f);
+            if (CameraManager.Instance.CurrentMode == ECameraMode.QV)
+            {
+                FireEffect.SetPosition(1, FireBulletPosition.transform.position + transform.forward * 1000f);
+            }
+            else
+            {
+                FireEffect.SetPosition(1, FireBulletPosition.transform.position + Camera.main.transform.forward * 1000f);
+            }
         }
 
     }

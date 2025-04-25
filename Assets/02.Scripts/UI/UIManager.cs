@@ -1,3 +1,4 @@
+using System.Collections;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -5,7 +6,9 @@ using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
-
+    [Header("체력")]
+    public Slider HealthSlider;
+    public TextMeshProUGUI HealthText;
     [Header("스태미나")]
     public Slider StaminaSlider;
     public TextMeshProUGUI StaminaText;
@@ -16,6 +19,11 @@ public class UIManager : Singleton<UIManager>
     [Header("폭탄")]
     public TextMeshProUGUI BombCountText;
     public Slider BoombChargeSlider;
+
+    [Header("피격 이펙트")]
+    public Image HitEffectImage;
+    public float effectTime;
+    private Coroutine _hitEffectRoutine;
 
     private void Start()
     {
@@ -31,7 +39,6 @@ public class UIManager : Singleton<UIManager>
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
-
     }
     public void InitializePlayerStaminaSlider(float value)
     {
@@ -41,6 +48,15 @@ public class UIManager : Singleton<UIManager>
     {
         StaminaSlider.value = value;
         StaminaText.text = $"{value.ToString("0")} / {StaminaSlider.maxValue.ToString("0")}";
+    }
+    public void InitializePlayerHealthSlider(float value)
+    {
+        HealthSlider.maxValue = value;
+    }
+    public void UpdateHealthSlider(float value)
+    {
+        HealthSlider.value = value;
+        HealthText.text = $"{value.ToString("0")} / {HealthSlider.maxValue.ToString("0")}";
     }
 
     public void UpdateBulletCount(int bulletCount, int maxBulletCount)
@@ -91,5 +107,30 @@ public class UIManager : Singleton<UIManager>
         {
             BoombChargeSlider.gameObject.SetActive(false);
         }
+    }
+
+    public void StartHitEffect()
+    {
+        if (_hitEffectRoutine != null)
+        {
+            StopCoroutine(_hitEffectRoutine);
+        }
+        _hitEffectRoutine = StartCoroutine(HitEffectRoutine());
+    }
+
+    private IEnumerator HitEffectRoutine()
+    {
+        HitEffectImage.gameObject.SetActive(true);
+        Color newColor = HitEffectImage.color;
+        newColor.a = 1;
+        HitEffectImage.color = newColor;
+        while (HitEffectImage.color.a >= 0)
+        {
+            newColor = HitEffectImage.color;
+            newColor.a -= Time.deltaTime / effectTime;
+            HitEffectImage.color = newColor;
+            yield return null;
+        }
+        HitEffectImage.gameObject.SetActive(false);
     }
 }

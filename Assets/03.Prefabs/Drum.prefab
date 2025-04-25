@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 6883417771539598406}
   - component: {fileID: 8260417975214769217}
   - component: {fileID: 7925563613446191960}
-  m_Layer: 0
+  - component: {fileID: 1437182758145158574}
+  m_Layer: 10
   m_Name: Drum
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -125,4 +126,37 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MaxHealth: 20
   _health: 0
-  ExplodeEffect: {fileID: 4359207831005044406, guid: 2c84933b9be1e594ba916a9d431dfabd, type: 3}
+  ExplodeEffect: {fileID: 4224323742570824736, guid: 2db2a98840436de48a0d8cab832a2834, type: 3}
+  ExplodeRadius: 2
+  ExplodePower: 5000
+  DeactiveTime: 5
+  AttackTargetLayer:
+    serializedVersion: 2
+    m_Bits: 1160
+--- !u!54 &1437182758145158574
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1152565046292659142}
+  serializedVersion: 4
+  m_Mass: 100
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
