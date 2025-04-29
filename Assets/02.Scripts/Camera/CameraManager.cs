@@ -33,8 +33,8 @@ public class CameraManager : Singleton<CameraManager>
     private void Update()
     {
         ChangeCameraMode();
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
+        float mouseX = InputManager.Instance.GetAxis("Mouse X");
+        float mouseY = InputManager.Instance.GetAxis("Mouse Y");
 
         // 2. 마우스 입력으로부터 회전시킬 방향을 만든다
         //Vector3 dir = new Vector3(-mouseY, mouseX, 0);
@@ -100,8 +100,6 @@ public class CameraManager : Singleton<CameraManager>
             }
             case ECameraMode.QV:
             {
-                TPSPivot.eulerAngles = new Vector3(Mathf.Clamp(((TPSPivot.eulerAngles.x >= 270) ? TPSPivot.eulerAngles.x - 360 : TPSPivot.eulerAngles.x) - delta.y, -90, 90)
-                                    , TPSPivot.eulerAngles.y, 0);
                 transform.LookAt(_target, Vector3.up);
                 break;
             }
@@ -110,17 +108,28 @@ public class CameraManager : Singleton<CameraManager>
 
     public void ChangeCameraMode()
     {
-        if (Input.GetKeyDown(KeyCode.Alpha8))
+        if (InputManager.Instance.GetKeyDown(KeyCode.Alpha8))
         {
-            _currentMode = ECameraMode.FPS;
             _target = FPSTarget;
+            if (_currentMode == ECameraMode.QV)
+            {
+                transform.eulerAngles = FPSTarget.parent.eulerAngles;
+                TPSPivot.localEulerAngles = Vector3.zero;
+            }
+            _currentMode = ECameraMode.FPS;
+
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha9))
+        else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha9))
         {
-            _currentMode = ECameraMode.TPS;
             _target = TPSTarget;
+            if (_currentMode == ECameraMode.QV)
+            {
+                transform.eulerAngles = FPSTarget.parent.eulerAngles;
+                TPSPivot.localEulerAngles = Vector3.zero;
+            }
+            _currentMode = ECameraMode.TPS;
         }
-        else if (Input.GetKeyDown(KeyCode.Alpha0))
+        else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha0))
         {
             _currentMode = ECameraMode.QV;
             _target = QVTarget;

@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class PlayerHealth : MonoBehaviour, IDamageable
 {
+    private Animator _animator;
     public float MaxHealth;
     private float _health;
     public float Health
@@ -14,7 +15,12 @@ public class PlayerHealth : MonoBehaviour, IDamageable
         {
             _health = Mathf.Clamp(value, 0, MaxHealth);
             UIManager.Instance.UpdateHealthSlider(_health);
+            _animator.SetLayerWeight(2, 1- _health / MaxHealth);
         }
+    }
+    private void Awake()
+    {
+        _animator = GetComponentInChildren<Animator>();
     }
     private void Start()
     {

@@ -1,6 +1,7 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class TypePool<T> : Pool<T> where T:MonoBehaviour, IType
+public class TypePool<T> : Pool<T> where T:MonoBehaviour, IInitializable, IType
 {
     public override T GetFromPool(Vector3 position, int type)
     {
@@ -10,6 +11,7 @@ public class TypePool<T> : Pool<T> where T:MonoBehaviour, IType
             {
                 T poolObject = _pool[i];
                 poolObject.transform.position = position;
+                poolObject.Initialize();
                 poolObject.gameObject.SetActive(true);
                 return poolObject;
             }
@@ -17,6 +19,7 @@ public class TypePool<T> : Pool<T> where T:MonoBehaviour, IType
         T newPoolObject = Instantiate(_poolPrefabs[type], transform);
         _pool.Add(newPoolObject);
         newPoolObject.transform.position = position;
+        newPoolObject.Initialize();
         newPoolObject.gameObject.SetActive(true);
         return newPoolObject;
     }

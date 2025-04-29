@@ -11,6 +11,7 @@ public class EnemyTraceState : AState
 
     public override void Enter()
     {
+
     }
 
     public override void Exit()
@@ -28,6 +29,7 @@ public class EnemyTraceState : AState
         if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) < _enemy.AttackDistance)
         {
             _stateMachine.ChangeState(EState.Attack);
+            _enemy.Animator.SetTrigger("MoveToAttackDelay");
             return;
         }
         _enemy.Agent.SetDestination(_enemy.Player.transform.position);

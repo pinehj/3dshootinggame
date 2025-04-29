@@ -14,8 +14,8 @@ public class GunRotate : MonoBehaviour
 
     private void Update()
     {
-        float mouseX = Input.GetAxis("Mouse X");
-        float mouseY = Input.GetAxis("Mouse Y");
+        float mouseX = InputManager.Instance.GetAxis("Mouse X");
+        float mouseY = InputManager.Instance.GetAxis("Mouse Y");
 
         _rotationX = mouseX * RotationSpeed * Time.deltaTime;
         _rotationY = mouseY * RotationSpeed * Time.deltaTime;

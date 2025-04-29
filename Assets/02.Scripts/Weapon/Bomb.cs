@@ -1,10 +1,16 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Bomb : MonoBehaviour
+public class Bomb : MonoBehaviour, IInitializable
 {
     //목표: 마우스가 오른쪽 버튼을 누르면 카메라가 
 
     public GameObject ExplosionEffectPrefab;
+
+    public void Initialize()
+    {
+        throw new System.NotImplementedException();
+    }
 
     private void OnCollisionEnter(Collision collision)
     {

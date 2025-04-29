@@ -25,12 +25,14 @@ public class EnemyAttackState : AState
         if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) > _enemy.AttackDistance)
         {
             _stateMachine.ChangeState(EState.Trace);
+            _enemy.Animator.SetTrigger("AttackDelayToMove");
             return;
         }
 
         _attackTimer += Time.deltaTime;
         if (_attackTimer >= _enemy.AttackCoolTime)
         {
+            _enemy.Animator.SetTrigger("AttackDelayToAttack");
             _attackTimer = 0;
         }
 

@@ -25,12 +25,14 @@ public class EnemyIdleState : AState
         if(_waitAndPatrolTimer > _enemy.WaitAndPatrolTime)
         {
             _stateMachine.ChangeState(EState.Patrol);
+            _enemy.Animator.SetTrigger("IdleToMove");
             return;
         }
        
         if (Vector3.Distance(_enemy.transform.position, _enemy.Player.transform.position) < _enemy.FindDistance)
         {
             _stateMachine.ChangeState(EState.Trace);
+            _enemy.Animator.SetTrigger("IdleToMove");
             return;
         }
 

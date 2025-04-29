@@ -11,9 +11,12 @@ public class EnemySpawner : MonoBehaviour
     }
     private IEnumerator SpawnRoutine()
     {
+        yield return new WaitForSeconds(SpawnInterval);
         while (true)
         {
-            EnemyPool.Instance.GetFromPool(transform.position, Random.Range(0, ((int)EEnemyType.Count)));
+            //EnemyPool.Instance.GetFromPool(transform.position, Random.Range(0, ((int)EEnemyType.Count)));
+            EnemyPool.Instance.GetFromPool(transform.position, (int)EEnemyType.Basic);
+
             yield return new WaitForSeconds(SpawnInterval);
         }
     }

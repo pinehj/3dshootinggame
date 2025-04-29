@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlayerMove : MonoBehaviour
 {
     private CharacterController _characterController;
-
+    private Animator _animator;
     [Header("상태창")]
     [SerializeField] private float _moveSpeed = 7f;
     [SerializeField] private float _stamina = 100f;
@@ -47,6 +47,7 @@ public class PlayerMove : MonoBehaviour
     private Vector3 dir = Vector3.zero;
     void Awake()
     {
+        _animator = GetComponentInChildren<Animator>();
         _characterController = GetComponent<CharacterController>();
     }
 
@@ -73,9 +74,13 @@ public class PlayerMove : MonoBehaviour
     {
         if (!_isDashing)
         {
-            float h = Input.GetAxisRaw("Horizontal");
-            float v = Input.GetAxisRaw("Vertical");
+            float h =InputManager.Instance.GetAxis("Horizontal");
+            float v = InputManager.Instance.GetAxis("Vertical");
             dir = new Vector3(h, 0, v);
+            _animator.SetFloat("MoveH", h);
+            _animator.SetFloat("MoveV", v);
+
+
             dir = dir.normalized;
 
 
@@ -87,7 +92,7 @@ public class PlayerMove : MonoBehaviour
 
     public void Run()
     {
-        if (Input.GetButton("Run"))
+        if (InputManager.Instance.GetButton("Run"))
         {
             _moveSpeed = PlayerMoveDataSO.WalkSpeed + PlayerMoveDataSO.RunSpeed * (Stamina / PlayerMoveDataSO.MaxStamina);
             _isRunning = true;
@@ -119,7 +124,7 @@ public class PlayerMove : MonoBehaviour
     public void Jump()
     {
         // 점프
-        if (Input.GetButtonDown("Jump") && _jumpCount < PlayerMoveDataSO.MaxJumpCount && !_isClimbing)
+        if (InputManager.Instance.GetButtonDown("Jump") && _jumpCount < PlayerMoveDataSO.MaxJumpCount && !_isClimbing)
         {
             _yVelocity = PlayerMoveDataSO.JumpPower;
             _isJumping = true;
@@ -129,7 +134,7 @@ public class PlayerMove : MonoBehaviour
 
     public void Dash()
     {
-        if (Input.GetButtonDown("Dash") && Stamina >= PlayerMoveDataSO.DashStaminaCost && !_isDashing)
+        if (InputManager.Instance.GetButtonDown("Dash") && Stamina >= PlayerMoveDataSO.DashStaminaCost && !_isDashing)
         {
             Stamina -= PlayerMoveDataSO.DashStaminaCost;
             StartCoroutine(nameof(DashCoroutine));

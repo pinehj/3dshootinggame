@@ -1,7 +1,8 @@
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class Pool<T> : Singleton<Pool<T>> where T:MonoBehaviour
+public class Pool<T> : Singleton<Pool<T>> where T:MonoBehaviour, IInitializable
 {
     [SerializeField] protected T[] _poolPrefabs;
     [SerializeField] protected int poolSize;
@@ -37,10 +38,7 @@ public class Pool<T> : Singleton<Pool<T>> where T:MonoBehaviour
             if (!_pool[i].isActiveAndEnabled)
             {
                 T poolObject = _pool[0];
-                poolObject.transform.position = position;
-                poolObject.transform.rotation = new Quaternion(0, 0, 0, 0);
-                poolObject.GetComponent<Rigidbody>().linearVelocity = Vector3.zero;
-                poolObject.GetComponent<Rigidbody>().angularVelocity = Vector3.zero;
+
 
                 poolObject.gameObject.SetActive(true);
                 return poolObject;
@@ -59,8 +57,8 @@ public class Pool<T> : Singleton<Pool<T>> where T:MonoBehaviour
             if (!_pool[i].isActiveAndEnabled)
             {
                 T poolObject = _pool[0];
-
-
+                poolObject.transform.position = position;
+                poolObject.Initialize();
                 poolObject.gameObject.SetActive(true);
                 return poolObject;
             }
@@ -68,6 +66,7 @@ public class Pool<T> : Singleton<Pool<T>> where T:MonoBehaviour
         T newPoolObject = Instantiate(_poolPrefabs[0], transform);
         _pool.Add(newPoolObject);
         newPoolObject.transform.position = position;
+        newPoolObject.Initialize();
         newPoolObject.gameObject.SetActive(true);
         return newPoolObject;
     }
@@ -75,7 +74,5 @@ public class Pool<T> : Singleton<Pool<T>> where T:MonoBehaviour
     public virtual void ReturnToPool(T poolObject)
     {
         poolObject.gameObject.SetActive(false);
-        poolObject.transform.position = transform.position;
-        poolObject.transform.rotation = new Quaternion(0, 0, 0, 0);
     }
 }

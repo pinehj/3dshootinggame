@@ -6,6 +6,9 @@ using UnityEngine.UI;
 
 public class UIManager : Singleton<UIManager>
 {
+    [Header("게임매니저")]
+    public TextMeshProUGUI GameManagerText;
+
     [Header("체력")]
     public Slider HealthSlider;
     public TextMeshProUGUI HealthText;
@@ -31,11 +34,11 @@ public class UIManager : Singleton<UIManager>
     }
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.BackQuote))
+        if (InputManager.Instance.GetKeyDown(KeyCode.BackQuote))
         {
             Cursor.lockState = CursorLockMode.None;
         }
-        if (Input.GetKeyUp(KeyCode.BackQuote))
+        if (InputManager.Instance.GetKeyUp(KeyCode.BackQuote))
         {
             Cursor.lockState = CursorLockMode.Locked;
         }

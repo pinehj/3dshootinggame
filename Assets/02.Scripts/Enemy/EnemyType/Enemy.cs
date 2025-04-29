@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
+using UnityEngine.UI;
 
 public enum EEnemyType
 {
@@ -11,7 +12,7 @@ public enum EEnemyType
 
     Count
 }
-public class Enemy : AStateMachineOwner, IDamageable, IType
+public class Enemy : AStateMachineOwner, IDamageable, IInitializable, IType
 {
     public EEnemyType Type;
 
@@ -44,13 +45,30 @@ public class Enemy : AStateMachineOwner, IDamageable, IType
     public float KnockbackedPower => _knockbackedPower;
 
     [SerializeField] private float _health;
-    public float Health => _health;
+    public float Health
+    {
+        get
+        {
+            return _health;
+        }
+        set
+        {
+            _health = Mathf.Clamp(value, 0, MaxHealth);
+            HealthBar.fillAmount = _health / MaxHealth;
+        }
+    }
     public float MaxHealth;
+
+    public Image HealthBar;
+
+
+    private Animator _animator;
+    public Animator Animator => _animator;
     private void Awake()
     {
+        _animator = GetComponentInChildren<Animator>();
         _player = GameObject.FindGameObjectWithTag("Player");
         _characterController = GetComponent<CharacterController>();
-        _startPosition = transform.position;
         _agent = GetComponent<NavMeshAgent>();
 
         InitializeStateMachine();
@@ -58,21 +76,7 @@ public class Enemy : AStateMachineOwner, IDamageable, IType
 
     protected virtual void Start()
     {
-        _health = MaxHealth;
-        Agent.speed = MoveSpeed;
         Type = EEnemyType.Basic;
-
-    }
-
-    private void OnEnable()
-    {
-        List<Vector3> patrolPointPositions = new List<Vector3>();
-        foreach (Transform patrolPoint in PatrolPoints)
-        {
-            patrolPointPositions.Add(patrolPoint.position);
-        }
-
-        PatrolPointPositions = patrolPointPositions;
     }
 
     private void Update()
@@ -104,19 +108,38 @@ public class Enemy : AStateMachineOwner, IDamageable, IType
 
     public void TakeDamage(Damage damage)
     {
-        _health -= damage.Value;
+        Health -= damage.Value;
         _damageOrigin = damage.From.transform.position;
         _knockbackedPower = damage.KnockbackPower;
         if (_health <= 0)
         {
             _statemachine.ChangeState(EState.Die);
+            Animator.SetTrigger("Die");
+
             return;
         }
         _statemachine.ChangeState(EState.Damaged);
+        Animator.SetTrigger("Hit");
+
     }
 
     public int GetEnumType()
     {
         return (int)Type;
+    }
+
+    public void Initialize()
+    {
+        _health = MaxHealth;
+        Agent.speed = MoveSpeed;
+        List<Vector3> patrolPointPositions = new List<Vector3>();
+        foreach (Transform patrolPoint in PatrolPoints)
+        {
+            patrolPointPositions.Add(patrolPoint.position);
+        }
+
+        PatrolPointPositions = patrolPointPositions;
+        _startPosition = transform.position;
+        transform.rotation = new Quaternion(0, 0, 0, 0);
     }
 }

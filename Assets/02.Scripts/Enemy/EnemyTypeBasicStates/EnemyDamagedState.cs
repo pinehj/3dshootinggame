@@ -26,6 +26,7 @@ public class EnemyDamagedState : AState
         if (_damagedTimer > _enemy.DamageTime)
         {
             _stateMachine.ChangeState(EState.Trace);
+
             return;
         }
         Vector3 dir = (_enemy.transform.position - _enemy.DamagedOrigin).normalized;

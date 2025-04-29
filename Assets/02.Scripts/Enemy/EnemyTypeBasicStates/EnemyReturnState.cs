@@ -23,6 +23,7 @@ public class EnemyReturnState : AState
         if (Vector3.Distance(_enemy.transform.position, _enemy.StartPosition) <= _enemy.ReturnDistance)
         {
             _stateMachine.ChangeState(EState.Idle);
+            _enemy.Animator.SetTrigger("MoveToIdle");
             return;
         }
 
