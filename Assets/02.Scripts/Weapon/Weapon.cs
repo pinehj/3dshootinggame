@@ -3,11 +3,17 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
+
+public enum EWeaponType
+{
+    Gun,
+    Throw,
+    Melee
+}
 public abstract class Weapon : MonoBehaviour
 {
     [Header("무기 설정값")]
     public WeaponDataSO WeaponData;
-    public Transform FireBulletPosition;
     public Transform WeaponPivot;
     [Header("무기 상태")]
     [SerializeField] protected bool _isEquiped;
@@ -54,7 +60,7 @@ public abstract class Weapon : MonoBehaviour
     {
         _isEquiped = true;
     }
-    public virtual void UnEquip()
+    public virtual void Unequip()
     {
         _isEquiped = false;
     }
@@ -62,13 +68,11 @@ public abstract class Weapon : MonoBehaviour
     {
         if (_attackTimer <= 0 && CurrentMagazine > 0)
         {
-            Debug.Log($"성공: {_attackTimer}");
             PerformAttack();
             return true;
         }
         else
         {
-            Debug.Log("실패");
             return false;
         }
     }

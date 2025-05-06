@@ -4,6 +4,13 @@ using UnityEngine;
 
 public class Gun : Weapon
 {
+    [Header("타입")]
+    [SerializeField] private EWeaponType _weaponType;
+    public EWeaponType WeaponType => _weaponType;
+
+    [Header("총기 설정값")]
+    public Transform FireBulletPosition;
+
     [Header("연사")]
     [SerializeField] private int _burstFireCount;
     [SerializeField] private float _minVerticalRecoil;
@@ -13,6 +20,8 @@ public class Gun : Weapon
     [Header("이펙트")]
     public LineRenderer FireEffect;
     [SerializeField] private GameObject BulletEffectPrefab;
+
+    [Header("재장전")]
     [SerializeField] private float _reloadTimer;
     public float ReloadTimer
     {
@@ -30,17 +39,14 @@ public class Gun : Weapon
             UIManager.Instance.UpdateBulletReloadSlider(_reloadTimer);
         }
     }
+    [SerializeField] private Coroutine _reloadCoroutine;
 
     protected override void Start()
     {
+        _weaponType = EWeaponType.Gun;
         base.Start();
     }
-    protected override void Update()
-    {
-        base.Update();
-        _reloadTimer -= Time.deltaTime;
-    }
-    
+
     public override bool Primary()
     {
         if (_isReloading)
@@ -94,7 +100,7 @@ public class Gun : Weapon
 
 
         _attackTimer = 1 / WeaponData.RateOfFirePerSec;
-        _currentMagazine--;
+        CurrentMagazine--;
 
         _burstFireCount++;
 
@@ -107,29 +113,35 @@ public class Gun : Weapon
 
     public override void Reload()
     {
-        if (InputManager.Instance.GetButtonDown("Reload") && _currentMagazine < WeaponData.MagazineCapacity && !_isReloading)
+        if (CurrentMagazine < WeaponData.MagazineCapacity && !_isReloading)
         {
-            StartCoroutine(nameof(ReloadBulletCoroutine));
+            _reloadCoroutine = StartCoroutine(ReloadBulletCoroutine());
         }
     }
 
     private void CancelReload()
     {
+        Debug.Log("재장전 취소");
         _isReloading = false;
-        StopCoroutine(nameof(ReloadBulletCoroutine));
-        _attackTimer = 0;
+        if (_reloadCoroutine != null)
+        {
+            StopCoroutine(_reloadCoroutine);
+        }
+        ReloadTimer = 0;
     }
 
     IEnumerator ReloadBulletCoroutine()
     {
         _isReloading = true;
         ReloadTimer = 0;
+        Debug.Log("재장전코루틴");
+
         while (ReloadTimer < WeaponData.ReloadTime)
         {
             ReloadTimer += Time.deltaTime;
             yield return null;
         }
-        _currentMagazine = WeaponData.MagazineCapacity;
+        CurrentMagazine = WeaponData.MagazineCapacity;
         _isReloading = false;
         ReloadTimer = 0;
         Debug.Log("Reload Complete");
@@ -167,5 +179,11 @@ public class Gun : Weapon
     public override void StopAttack()
     {
         _burstFireCount = 0;
+    }
+
+    public override void Equip()
+    {
+        base.Equip();
+        UIManager.Instance.InitializeBulletReloadSlider(WeaponData.ReloadTime);
     }
 }

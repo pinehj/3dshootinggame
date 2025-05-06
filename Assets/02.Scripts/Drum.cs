@@ -29,7 +29,8 @@ public class Drum : MonoBehaviour, IDamageable
             return;
         }
         _health -= damage.Value;
-        _rigidbody.AddForceAtPosition(-damage.Normal * damage.KnockbackPower, damage.HitPoint, ForceMode.Impulse);
+        //_rigidbody.AddForceAtPosition(-damage.Normal * damage.KnockbackPower, damage.HitPoint, ForceMode.Impulse);
+        _rigidbody.AddForce((transform.position - damage.From.transform.position).normalized * damage.KnockbackPower, ForceMode.Impulse);
         if(_health <= 0)
         {
             StartCoroutine(ExplodeRoutine());
