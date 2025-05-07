@@ -122,7 +122,6 @@ public class PlayerMove : MonoBehaviour
         {
             if (_rigidbody.linearVelocity.y >= 0)
             {
-                Debug.Log("SS");
                 return;
             }
             _isJumping = false;
@@ -196,7 +195,6 @@ public class PlayerMove : MonoBehaviour
             //_rigidbody.MovePosition(transform.position + dir * PlayerMoveDataSO.ClimbSpeed * Time.deltaTime);
             _rigidbody.linearVelocity = dir * PlayerMoveDataSO.ClimbSpeed;
         }
-        Debug.Log(_isClimbing);
     }
 
     public void RegenStamina()
