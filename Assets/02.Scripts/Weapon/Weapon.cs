@@ -10,8 +10,12 @@ public enum EWeaponType
     Throw,
     Melee
 }
+
 public abstract class Weapon : MonoBehaviour
 {
+    [Header("타입")]
+    [SerializeField] protected EWeaponType _weaponType;
+    public EWeaponType WeaponType => _weaponType;
     [Header("무기 설정값")]
     public WeaponDataSO WeaponData;
     public Transform WeaponPivot;

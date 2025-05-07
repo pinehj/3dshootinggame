@@ -12,15 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bf94fd458a7efc4f83ff54acdb27a69, type: 3}
   m_Name: PlayerMoveDataSO
   m_EditorClassIdentifier: 
-  WalkSpeed: 7
-  RunSpeed: 7
+  WalkSpeed: 5
+  RunSpeed: 10
   MaxStamina: 100
   RunStaminaCost: 20
   DashStaminaCost: 50
   DashDuration: 0.2
   ClimbStaminaCost: 50
   StaminaRegen: 50
-  JumpPower: 3
+  JumpPower: 200
   MaxJumpCount: 2
   DashPower: 5
-  ClimbSpeed: 5
+  ClimbSpeed: 10

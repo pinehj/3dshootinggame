@@ -4,9 +4,7 @@ using UnityEngine;
 
 public class Gun : Weapon
 {
-    [Header("타입")]
-    [SerializeField] private EWeaponType _weaponType;
-    public EWeaponType WeaponType => _weaponType;
+
 
     [Header("총기 설정값")]
     public Transform FireBulletPosition;

@@ -12,7 +12,7 @@ public class GunRotate : MonoBehaviour
         baseEulerOffset = transform.eulerAngles;
     }
 
-    private void Update()
+    private void LateUpdate()
     {
         float mouseX = InputManager.Instance.GetAxis("Mouse X");
         float mouseY = InputManager.Instance.GetAxis("Mouse Y");

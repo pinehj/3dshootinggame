@@ -19,6 +19,7 @@ public class PlayerWeapon : MonoBehaviour
     [SerializeField] private Weapon _throw;
     [SerializeField] private Weapon _melee;
 
+    private int _meleeLayerIndex;
     //[Header("폭탄")]
     //[SerializeField] private int _bombCount;
     //public int BombCount
@@ -49,6 +50,7 @@ public class PlayerWeapon : MonoBehaviour
     private void Awake()
     {
         _animator = GetComponentInChildren<Animator>();
+        _meleeLayerIndex = _animator.GetLayerIndex("Melee Layer");
     }
     private void Start()
     {
@@ -70,7 +72,10 @@ public class PlayerWeapon : MonoBehaviour
     {
         if (InputManager.Instance.GetMouseButton(0))
         {
-            _currentWeapon.Primary();
+            if (_currentWeapon.Primary())
+            {
+                _animator.SetTrigger("Shot");
+            }
         }
 
         if (InputManager.Instance.GetMouseButtonUp(0))
@@ -98,6 +103,7 @@ public class PlayerWeapon : MonoBehaviour
         else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha3))
         {
             newWeapon = _melee;
+            _animator.SetLayerWeight(_meleeLayerIndex, 1);
         }
 
         if (newWeapon != null && _currentWeapon != newWeapon)
