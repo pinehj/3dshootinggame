@@ -1,6 +1,5 @@
 using System.Collections;
 using TMPro;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -8,6 +7,7 @@ public class UIManager : Singleton<UIManager>
 {
     [Header("게임매니저")]
     public TextMeshProUGUI GameManagerText;
+    public UI_OptionPopup PopupOption;
 
     [Header("체력")]
     public Slider HealthSlider;
@@ -28,10 +28,6 @@ public class UIManager : Singleton<UIManager>
     public float effectTime;
     private Coroutine _hitEffectRoutine;
 
-    private void Start()
-    {
-            Cursor.lockState = CursorLockMode.Locked;
-    }
     private void Update()
     {
         if (InputManager.Instance.GetKeyDown(KeyCode.BackQuote))
@@ -135,5 +131,14 @@ public class UIManager : Singleton<UIManager>
             yield return null;
         }
         HitEffectImage.gameObject.SetActive(false);
+    }
+
+    public void OpenOptionPopup()
+    {
+        PopupOption.Open();
+    }
+    public void CloseOptionPopup()
+    {
+        PopupOption.Close();
     }
 }

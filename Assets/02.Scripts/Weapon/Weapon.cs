@@ -53,13 +53,7 @@ public abstract class Weapon : MonoBehaviour
     {
         _attackTimer -= Time.deltaTime;
     }
-    protected virtual void LateUpdate()
-    {
-        float length = Vector3.Distance(transform.position, WeaponPivot.transform.position);
-        WeaponPivot.eulerAngles = Camera.main.transform.eulerAngles;
-        transform.position = WeaponPivot.transform.position + WeaponPivot.forward * length;
-        transform.forward = WeaponPivot.forward;
-    }
+
     public virtual void Equip()
     {
         _isEquiped = true;

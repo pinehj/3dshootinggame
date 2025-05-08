@@ -8,9 +8,7 @@ public class PlayerWeapon : MonoBehaviour
     [Header("설정값")]
     public PlayerFireDataSO PlayerFireDataSO;
 
-
-
-    private Animator _animator;
+    private PlayerAnimationController _animationController;
 
     [Header("무기")]
     [SerializeField] private Weapon _currentWeapon;
@@ -19,7 +17,6 @@ public class PlayerWeapon : MonoBehaviour
     [SerializeField] private Weapon _throw;
     [SerializeField] private Weapon _melee;
 
-    private int _meleeLayerIndex;
     //[Header("폭탄")]
     //[SerializeField] private int _bombCount;
     //public int BombCount
@@ -49,8 +46,7 @@ public class PlayerWeapon : MonoBehaviour
     //}
     private void Awake()
     {
-        _animator = GetComponentInChildren<Animator>();
-        _meleeLayerIndex = _animator.GetLayerIndex("Melee Layer");
+        _animationController = GetComponentInChildren<PlayerAnimationController>();
     }
     private void Start()
     {
@@ -74,7 +70,8 @@ public class PlayerWeapon : MonoBehaviour
         {
             if (_currentWeapon.Primary())
             {
-                _animator.SetTrigger("Shot");
+                _animationController.SetTrigger("Shot");
+                Debug.Log("ㅋㅋ");
             }
         }
 
@@ -95,6 +92,10 @@ public class PlayerWeapon : MonoBehaviour
         if (InputManager.Instance.GetKeyDown(KeyCode.Alpha1))
         {
             newWeapon = _gun;
+            _animationController.SetLayerWeight("Melee Layer", 0);
+            _animationController.SetLayerWeight("Shot Layer", 1);
+
+            _animationController.ShouldIK = true;
         }
         else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha2))
         {
@@ -103,7 +104,10 @@ public class PlayerWeapon : MonoBehaviour
         else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha3))
         {
             newWeapon = _melee;
-            _animator.SetLayerWeight(_meleeLayerIndex, 1);
+            _animationController.SetLayerWeight("Melee Layer", 1);
+            _animationController.SetLayerWeight("Shot Layer", 0);
+
+            _animationController.ShouldIK = false;
         }
 
         if (newWeapon != null && _currentWeapon != newWeapon)

@@ -44,7 +44,13 @@ public class Gun : Weapon
         _weaponType = EWeaponType.Gun;
         base.Start();
     }
-
+    protected virtual void LateUpdate()
+    {
+        float length = Vector3.Distance(transform.position, WeaponPivot.transform.position);
+        WeaponPivot.eulerAngles = Camera.main.transform.eulerAngles;
+        transform.position = WeaponPivot.transform.position + WeaponPivot.forward * length;
+        transform.forward = WeaponPivot.forward;
+    }
     public override bool Primary()
     {
         if (_isReloading)
