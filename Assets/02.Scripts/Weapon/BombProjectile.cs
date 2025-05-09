@@ -4,14 +4,19 @@ using UnityEngine;
 public class BombProjectile : MonoBehaviour, IInitializable
 {
     public GameObject ExplosionEffectPrefab;
-
+    public bool IsThrowed;
     public void Initialize()
     {
-        throw new System.NotImplementedException();
+        transform.localRotation = Quaternion.identity;
+        IsThrowed = false;
     }
 
     private void OnCollisionEnter(Collision collision)
     {
+        if (!IsThrowed)
+        {
+            return;
+        }
         GameObject effectObject = Instantiate(ExplosionEffectPrefab);
         effectObject.transform.position = transform.position;
 

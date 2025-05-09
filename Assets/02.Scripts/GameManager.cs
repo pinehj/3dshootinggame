@@ -54,7 +54,6 @@ public class GameManager : Singleton<GameManager>
         Cursor.lockState = CursorLockMode.Locked;
 
         Time.timeScale = 1f;
-        Debug.Log("컨티뉴");
         _currentGameState = EGameState.Run;
     }
 

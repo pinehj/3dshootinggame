@@ -344,7 +344,7 @@ AnimatorController:
   - serializedVersion: 5
     m_Name: Grenade Layer
     m_StateMachine: {fileID: 2198083924743864285}
-    m_Mask: {fileID: 0}
+    m_Mask: {fileID: 31900000, guid: 871aaab996bfc7040b71086dc4ddf6a3, type: 2}
     m_Motions: []
     m_Behaviours: []
     m_BlendingMode: 0

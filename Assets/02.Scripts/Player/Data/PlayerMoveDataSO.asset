@@ -20,7 +20,7 @@ MonoBehaviour:
   DashDuration: 0.2
   ClimbStaminaCost: 50
   StaminaRegen: 50
-  JumpPower: 2
+  JumpPower: 3
   MaxJumpCount: 2
   DashPower: 5
   ClimbSpeed: 10

@@ -11,6 +11,18 @@ public class Melee : Weapon
     [SerializeField] private float _castAngleRange;
     [SerializeField] private LayerMask _targetLayer;
 
+    public override void Initialize()
+    {
+        _weaponType = EWeaponType.Melee;
+        base.Initialize();
+    }
+
+    protected virtual void LateUpdate()
+    {
+        transform.position = WeaponTransform.position;
+        transform.rotation = WeaponTransform.rotation;
+    }
+
     public override void Alternate()
     {
     }

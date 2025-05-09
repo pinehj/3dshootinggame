@@ -39,10 +39,10 @@ public class Gun : Weapon
     }
     [SerializeField] private Coroutine _reloadCoroutine;
 
-    protected override void Start()
+    public override void Initialize()
     {
         _weaponType = EWeaponType.Gun;
-        base.Start();
+        base.Initialize();
     }
     protected virtual void LateUpdate()
     {

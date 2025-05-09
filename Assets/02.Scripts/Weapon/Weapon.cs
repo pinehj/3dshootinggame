@@ -19,6 +19,7 @@ public abstract class Weapon : MonoBehaviour
     [Header("무기 설정값")]
     public WeaponDataSO WeaponData;
     public Transform WeaponPivot;
+    public Transform WeaponTransform;
     [Header("무기 상태")]
     [SerializeField] protected bool _isEquiped;
     [SerializeField] protected bool _isReloading;
@@ -45,7 +46,7 @@ public abstract class Weapon : MonoBehaviour
     [SerializeField] protected float _attackTimer;
 
 
-    protected virtual void Start()
+    public virtual void Initialize()
     {
         CurrentMagazine = WeaponData.MagazineCapacity;
     }
@@ -56,17 +57,18 @@ public abstract class Weapon : MonoBehaviour
 
     public virtual void Equip()
     {
+        gameObject.SetActive(true);
         _isEquiped = true;
     }
     public virtual void Unequip()
     {
+        gameObject.SetActive(false);
         _isEquiped = false;
     }
     public virtual bool Primary()
     {
         if (_attackTimer <= 0 && CurrentMagazine > 0)
         {
-            PerformAttack();
             return true;
         }
         else

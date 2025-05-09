@@ -8,7 +8,6 @@ public class UI_Popup : MonoBehaviour
     {
         _closeCallback = closeCallback;
         gameObject.SetActive(true);
-        Debug.Log("?ㅇ");
     }
     public virtual void Close()
     {

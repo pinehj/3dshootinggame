@@ -140,6 +140,6 @@ public class Enemy : AStateMachineOwner, IDamageable, IInitializable, IType
 
         PatrolPointPositions = patrolPointPositions;
         _startPosition = transform.position;
-        transform.rotation = new Quaternion(0, 0, 0, 0);
+        transform.localRotation = Quaternion.identity;
     }
 }

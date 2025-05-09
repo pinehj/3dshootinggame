@@ -37,10 +37,10 @@ public class Pool<T> : Singleton<Pool<T>> where T:MonoBehaviour, IInitializable
         {
             if (!_pool[i].isActiveAndEnabled)
             {
-                T poolObject = _pool[0];
-
+                T poolObject = _pool[i];
 
                 poolObject.gameObject.SetActive(true);
+                Debug.Log(poolObject.gameObject.name);
                 return poolObject;
             }
         }
@@ -56,7 +56,7 @@ public class Pool<T> : Singleton<Pool<T>> where T:MonoBehaviour, IInitializable
         {
             if (!_pool[i].isActiveAndEnabled)
             {
-                T poolObject = _pool[0];
+                T poolObject = _pool[i];
                 poolObject.transform.position = position;
                 poolObject.Initialize();
                 poolObject.gameObject.SetActive(true);
@@ -68,6 +68,7 @@ public class Pool<T> : Singleton<Pool<T>> where T:MonoBehaviour, IInitializable
         newPoolObject.transform.position = position;
         newPoolObject.Initialize();
         newPoolObject.gameObject.SetActive(true);
+        Debug.Log("SS");
         return newPoolObject;
     }
 

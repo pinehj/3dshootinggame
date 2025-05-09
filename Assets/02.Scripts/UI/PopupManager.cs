@@ -16,7 +16,6 @@ public class PopupManager : Singleton<PopupManager>
 
     private void Update()
     {
-        UnityEngine.Debug.Log(_openedPopups.Count);
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if(_openedPopups.Count >0)

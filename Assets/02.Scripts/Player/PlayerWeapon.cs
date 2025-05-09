@@ -55,6 +55,11 @@ public class PlayerWeapon : MonoBehaviour
         //BombChargeTime = 0;
 
         _currentWeapon.Equip();
+
+        _gun.Initialize();
+        _melee.Initialize();
+        _throw.Initialize();
+        
     }
     private void Update()
     {
@@ -71,7 +76,6 @@ public class PlayerWeapon : MonoBehaviour
             if (_currentWeapon.Primary())
             {
                 _animationController.SetTrigger("Shot");
-                Debug.Log("ㅋㅋ");
             }
         }
 
@@ -94,18 +98,26 @@ public class PlayerWeapon : MonoBehaviour
             newWeapon = _gun;
             _animationController.SetLayerWeight("Melee Layer", 0);
             _animationController.SetLayerWeight("Shot Layer", 1);
+            _animationController.SetLayerWeight("Grenade Layer", 0);
+
 
             _animationController.ShouldIK = true;
         }
         else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha2))
         {
             newWeapon = _throw;
+            _animationController.SetLayerWeight("Melee Layer", 0);
+            _animationController.SetLayerWeight("Shot Layer", 0);
+            _animationController.SetLayerWeight("Grenade Layer", 1);
+
+            _animationController.ShouldIK = false;
         }
         else if (InputManager.Instance.GetKeyDown(KeyCode.Alpha3))
         {
             newWeapon = _melee;
             _animationController.SetLayerWeight("Melee Layer", 1);
             _animationController.SetLayerWeight("Shot Layer", 0);
+            _animationController.SetLayerWeight("Grenade Layer", 0);
 
             _animationController.ShouldIK = false;
         }
@@ -113,10 +125,13 @@ public class PlayerWeapon : MonoBehaviour
         if (newWeapon != null && _currentWeapon != newWeapon)
         {
             _currentWeapon.Unequip();
-            _currentWeapon.gameObject.SetActive(false);
             _currentWeapon = newWeapon;
             _currentWeapon.Equip();
-            _currentWeapon.gameObject.SetActive(true);
         }
+    }
+
+    public void AnimationAttack()
+    {
+        _currentWeapon.PerformAttack();
     }
 }
