@@ -15,6 +15,6 @@ MonoBehaviour:
   Damage: 40
   KnockbackPower: 20
   MagazineCapacity: 99
-  RateOfFirePerSec: 1.5
+  RateOfFirePerSec: 1.2
   ReloadTime: 0
   ZoomMult: 0

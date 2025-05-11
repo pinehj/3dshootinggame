@@ -18,7 +18,6 @@ public abstract class Weapon : MonoBehaviour
     public EWeaponType WeaponType => _weaponType;
     [Header("무기 설정값")]
     public WeaponDataSO WeaponData;
-    public Transform WeaponPivot;
     public Transform WeaponTransform;
     [Header("무기 상태")]
     [SerializeField] protected bool _isEquiped;
@@ -69,6 +68,7 @@ public abstract class Weapon : MonoBehaviour
     {
         if (_attackTimer <= 0 && CurrentMagazine > 0)
         {
+            _attackTimer = 1 / WeaponData.RateOfFirePerSec;
             return true;
         }
         else

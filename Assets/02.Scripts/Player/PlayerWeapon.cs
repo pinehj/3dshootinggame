@@ -124,14 +124,20 @@ public class PlayerWeapon : MonoBehaviour
 
         if (newWeapon != null && _currentWeapon != newWeapon)
         {
+            _animationController.SetTrigger("AnimationReset");
             _currentWeapon.Unequip();
             _currentWeapon = newWeapon;
             _currentWeapon.Equip();
         }
     }
 
-    public void AnimationAttack()
+    public void PerformAttack()
     {
         _currentWeapon.PerformAttack();
+    }
+
+    public void Equip()
+    {
+        _currentWeapon.Equip();
     }
 }

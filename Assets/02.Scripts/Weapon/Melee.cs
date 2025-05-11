@@ -48,7 +48,6 @@ public class Melee : Weapon
             }
         }
 
-        _attackTimer = 1 / WeaponData.RateOfFirePerSec;
     }
 
     public bool IsInAttackRange(Vector3 targetPos)

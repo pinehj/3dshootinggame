@@ -23,17 +23,17 @@ public class Bomb : Weapon
     public float ThrowBombPower;
 
     [SerializeField] private BombProjectile _bombProjectile;
-    private bool _isThrowed;
+
     protected virtual void LateUpdate()
     {
         transform.position = WeaponTransform.position;
-        transform.rotation = WeaponTransform.rotation;
+        //transform.rotation = WeaponTransform.rotation;
 
-        if(_bombProjectile != null && !_isThrowed)
+        if(_bombProjectile != null && !_bombProjectile.IsThrowed)
         {
             _bombProjectile.transform.position = WeaponTransform.position;
             _bombProjectile.transform.rotation = WeaponTransform.rotation;
-            Debug.Log("ss");
+            _bombProjectile.transform.rotation = Quaternion.identity;
         }
     }
 
@@ -56,7 +56,6 @@ public class Bomb : Weapon
     public override void Unequip()
     {
         base.Unequip();
-        _isThrowed = false;
 
         if(_bombProjectile != null)
         {
@@ -79,22 +78,16 @@ public class Bomb : Weapon
 
     public override void PerformAttack()
     {
-        _isThrowed = true;
         _bombProjectile.IsThrowed = true;
         CurrentMagazine--;
         Rigidbody projectileRigidbody = _bombProjectile.GetComponent<Rigidbody>();
-        projectileRigidbody.AddForce((Camera.main.transform.forward + Camera.main.transform.up / 2) * ThrowBombPower
+        projectileRigidbody.isKinematic = false;
+        projectileRigidbody.AddForce(Camera.main.transform.forward * ThrowBombPower
                                 //* (ThrowBombPower + BombChargePower * (BombChargeTime / PlayerFireDataSO.MaxBombChargeTime))
                                 , ForceMode.Impulse);
-        projectileRigidbody.AddTorque(Vector3.one);
+        //projectileRigidbody.AddTorque(Vector3.one);
 
 
         _bombProjectile = null;
-        _isThrowed = false;
-
-        if (CurrentMagazine > 0)
-        {
-            Equip();
-        }
     }
 }

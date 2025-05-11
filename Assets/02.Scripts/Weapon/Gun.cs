@@ -8,6 +8,7 @@ public class Gun : Weapon
 
     [Header("총기 설정값")]
     public Transform FireBulletPosition;
+    public Transform GunPivot;
 
     [Header("연사")]
     [SerializeField] private int _burstFireCount;
@@ -46,10 +47,10 @@ public class Gun : Weapon
     }
     protected virtual void LateUpdate()
     {
-        float length = Vector3.Distance(transform.position, WeaponPivot.transform.position);
-        WeaponPivot.eulerAngles = Camera.main.transform.eulerAngles;
-        transform.position = WeaponPivot.transform.position + WeaponPivot.forward * length;
-        transform.forward = WeaponPivot.forward;
+        float length = Vector3.Distance(transform.position, GunPivot.transform.position);
+        GunPivot.eulerAngles = Camera.main.transform.eulerAngles;
+        transform.position = GunPivot.transform.position + GunPivot.forward * length;
+        transform.forward = GunPivot.forward;
     }
     public override bool Primary()
     {
@@ -103,7 +104,6 @@ public class Gun : Weapon
         StartCoroutine(nameof(DeactiveFireEffectCoroutine), .03f);
 
 
-        _attackTimer = 1 / WeaponData.RateOfFirePerSec;
         CurrentMagazine--;
 
         _burstFireCount++;

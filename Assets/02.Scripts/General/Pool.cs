@@ -38,15 +38,17 @@ public class Pool<T> : Singleton<Pool<T>> where T:MonoBehaviour, IInitializable
             if (!_pool[i].isActiveAndEnabled)
             {
                 T poolObject = _pool[i];
-
+                Debug.Log(i);
+                poolObject.transform.position = position;
+                poolObject.Initialize();
                 poolObject.gameObject.SetActive(true);
-                Debug.Log(poolObject.gameObject.name);
                 return poolObject;
             }
         }
         T newPoolObject = Instantiate(_poolPrefabs[0], transform);
         _pool.Add(newPoolObject);
         newPoolObject.transform.position = position;
+        newPoolObject.Initialize();
         newPoolObject.gameObject.SetActive(true);
         return newPoolObject;
     }
