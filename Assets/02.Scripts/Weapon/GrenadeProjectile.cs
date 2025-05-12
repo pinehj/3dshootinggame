@@ -1,7 +1,7 @@
 using Unity.VisualScripting;
 using UnityEngine;
 
-public class BombProjectile : MonoBehaviour, IInitializable
+public class GrenadeProjectile : MonoBehaviour, IInitializable
 {
     public GameObject ExplosionEffectPrefab;
     public bool IsThrowed;
@@ -29,6 +29,6 @@ public class BombProjectile : MonoBehaviour, IInitializable
         effectObject.transform.position = transform.position;
 
         Debug.Log(collision.gameObject.name);
-        BombPool.Instance.ReturnToPool(this);
+        GrenadePool.Instance.ReturnToPool(this);
     }
 }

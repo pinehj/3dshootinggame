@@ -48,7 +48,8 @@ public class Gun : Weapon
     protected virtual void LateUpdate()
     {
         float length = Vector3.Distance(transform.position, GunPivot.transform.position);
-        GunPivot.eulerAngles = Camera.main.transform.eulerAngles;
+
+        GunPivot.eulerAngles = CameraManager.Instance.TPSTarget.eulerAngles;
         transform.position = GunPivot.transform.position + GunPivot.forward * length;
         transform.forward = GunPivot.forward;
     }

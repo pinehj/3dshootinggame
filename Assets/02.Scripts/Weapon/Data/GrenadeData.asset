@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Damage: 100
   KnockbackPower: 30
-  MagazineCapacity: 3
+  MagazineCapacity: 90
   RateOfFirePerSec: 0.5
   ReloadTime: 0
   ZoomMult: 0

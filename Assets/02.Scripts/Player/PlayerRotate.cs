@@ -1,4 +1,6 @@
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 public class PlayerRotate : MonoBehaviour
 {
@@ -12,10 +14,8 @@ public class PlayerRotate : MonoBehaviour
 
         if (UnityEngine.Cursor.lockState == CursorLockMode.Locked)
         {
-
             _rotationX += mouseX * RotationSpeed * Time.deltaTime;
             transform.eulerAngles = new Vector3(0, _rotationX, 0);
-
         }
     }
 }

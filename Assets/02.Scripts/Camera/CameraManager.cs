@@ -10,7 +10,7 @@ public class CameraManager : Singleton<CameraManager>
 {
 
 
-    private ECameraMode _currentMode;
+    [SerializeField] private ECameraMode _currentMode;
     public ECameraMode CurrentMode => _currentMode;
 
     public float RotationSpeed = 15f;
@@ -56,7 +56,7 @@ public class CameraManager : Singleton<CameraManager>
 
 
         //90 ~ 0   270 ~ 360
-        if (UnityEngine.Cursor.lockState == CursorLockMode.Locked)
+        if (GameManager.Instance.CurrentGameState == EGameState.Run)
         {
             Rotate(new Vector2(_rotationX, _rotationY));
         }
@@ -91,6 +91,8 @@ public class CameraManager : Singleton<CameraManager>
             case ECameraMode.FPS:
             case ECameraMode.TPS:
             {
+                UnityEngine.Cursor.lockState = CursorLockMode.Locked;
+
                 TPSPivot.eulerAngles = new Vector3(Mathf.Clamp(((TPSPivot.eulerAngles.x >= 270) ? TPSPivot.eulerAngles.x - 360 : TPSPivot.eulerAngles.x) - delta.y, -90, 90)
                                     , TPSPivot.eulerAngles.y, 0);
 
@@ -100,6 +102,9 @@ public class CameraManager : Singleton<CameraManager>
             }
             case ECameraMode.QV:
             {
+                UnityEngine.Cursor.lockState = CursorLockMode.None;
+                TPSPivot.eulerAngles = new Vector3(0
+                                    , TPSPivot.eulerAngles.y, 0);
                 transform.LookAt(_target, Vector3.up);
                 break;
             }
