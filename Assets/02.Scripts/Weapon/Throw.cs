@@ -78,9 +78,19 @@ public class Throw : Weapon
         CurrentMagazine--;
         Rigidbody projectileRigidbody = _projectile.GetComponent<Rigidbody>();
         projectileRigidbody.isKinematic = false;
-        projectileRigidbody.AddForce(Camera.main.transform.forward * ThrowPower
+
+        if (CameraManager.Instance.CurrentMode == ECameraMode.QV)
+        {
+            projectileRigidbody.AddForce(transform.forward * ThrowPower
                                 //* (ThrowBombPower + BombChargePower * (BombChargeTime / PlayerFireDataSO.MaxBombChargeTime))
                                 , ForceMode.Impulse);
+        }
+        else
+        {
+            projectileRigidbody.AddForce(Camera.main.transform.forward * ThrowPower
+                                //* (ThrowBombPower + BombChargePower * (BombChargeTime / PlayerFireDataSO.MaxBombChargeTime))
+                                , ForceMode.Impulse);
+        }
         projectileRigidbody.AddTorque(Vector3.one);
 
 

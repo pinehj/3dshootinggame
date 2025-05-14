@@ -109,9 +109,9 @@ public class Gun : Weapon
 
         _burstFireCount++;
 
-        if (_burstFireCount > 3)
+        if (_burstFireCount > 3 && CameraManager.Instance.CurrentMode != ECameraMode.QV)
         {
-            Camera.main.transform.GetComponent<CameraManager>().Rotate(new Vector2(0, Random.Range(_minVerticalRecoil, _maxVerticalRecoil)) * Time.deltaTime * _verticalRecoilSpeed);
+            CameraManager.Instance.Rotate(new Vector2(0, Random.Range(_minVerticalRecoil, _maxVerticalRecoil)) * Time.deltaTime * _verticalRecoilSpeed);
         }
     }
 
@@ -126,7 +126,6 @@ public class Gun : Weapon
 
     private void CancelReload()
     {
-        Debug.Log("재장전 취소");
         _isReloading = false;
         if (_reloadCoroutine != null)
         {
@@ -139,7 +138,6 @@ public class Gun : Weapon
     {
         _isReloading = true;
         ReloadTimer = 0;
-        Debug.Log("재장전코루틴");
 
         while (ReloadTimer < WeaponData.ReloadTime)
         {
@@ -149,7 +147,6 @@ public class Gun : Weapon
         CurrentMagazine = WeaponData.MagazineCapacity;
         _isReloading = false;
         ReloadTimer = 0;
-        Debug.Log("Reload Complete");
     }
 
     private void StartFireEffect(RaycastHit hitInfo, bool isHit)

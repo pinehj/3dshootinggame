@@ -102,7 +102,10 @@ public class CameraManager : Singleton<CameraManager>
             }
             case ECameraMode.QV:
             {
-                UnityEngine.Cursor.lockState = CursorLockMode.None;
+                if (UnityEngine.Cursor.lockState != CursorLockMode.None)
+                {
+                    UnityEngine.Cursor.lockState = CursorLockMode.None;
+                }
                 TPSPivot.eulerAngles = new Vector3(0
                                     , TPSPivot.eulerAngles.y, 0);
                 transform.LookAt(_target, Vector3.up);
