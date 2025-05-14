@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.iOS;
 using static UnityEngine.Rendering.DebugUI;
 
 public class InputManager : Singleton<InputManager>
@@ -125,6 +127,24 @@ public class InputManager : Singleton<InputManager>
         else
         {
             return false;
+        }
+    }
+    public Vector2 GetMousePositionFromCenter()
+    {
+        if (GameManager.Instance.CurrentGameState == EGameState.Run)
+        {
+            Vector2 centerPos = new Vector2(Screen.width / 2, Screen.height / 2);
+            Vector2 mousePos = Input.mousePosition;
+
+            return mousePos - centerPos;
+
+            //float rad = Mathf.Acos((mousePos.x - centerPos.x) / Vector2.Distance(mousePos, centerPos));
+            //float deg = rad * Mathf.Rad2Deg;
+
+        }
+        else
+        {
+            return Vector2.zero;
         }
     }
 }

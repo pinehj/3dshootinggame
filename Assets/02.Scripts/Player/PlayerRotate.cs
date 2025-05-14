@@ -12,10 +12,19 @@ public class PlayerRotate : MonoBehaviour
     {
         float mouseX = InputManager.Instance.GetAxis("Mouse X");
 
+        if (CameraManager.Instance.CurrentMode == ECameraMode.QV)
+        {
+            Vector2 targetPos = InputManager.Instance.GetMousePositionFromCenter();
+
+
+            transform.forward = new Vector3(targetPos.x, 0, targetPos.y);
+        }
         if (UnityEngine.Cursor.lockState == CursorLockMode.Locked)
         {
-            _rotationX += mouseX * RotationSpeed * Time.deltaTime;
-            transform.eulerAngles = new Vector3(0, _rotationX, 0);
+            _rotationX = mouseX * RotationSpeed * Time.deltaTime;
+            //transform.eulerAngles = new Vector3(0, _rotationX, 0);
+
+            transform.eulerAngles = new Vector3(0, transform.eulerAngles.y + _rotationX, 0);
         }
     }
 }
